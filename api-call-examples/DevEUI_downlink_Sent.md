@@ -1,4 +1,5 @@
 # DevEUI_downlink_Sent
+The API call your Application Server will receive when a queued downlink message has been sent to one of your devices.
 
 ## Method
 POST
