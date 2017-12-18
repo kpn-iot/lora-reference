@@ -27,10 +27,12 @@ var_dump($result);
 /**
  * Calculate token and queue a downlink message
  * 
- * @param Device $device
- * @param type $payload
- * @param type $timestampOffset
- * @return array
+ * @param string $devEUI
+ * @param integer $portId
+ * @param string $payload
+ * @param string $asId
+ * @param string $lrcAsKey
+ * @return boolean|string - true if success, else the error message
  */
 function queueDownlink($devEUI, $portId, $payload, $asId, $lrcAsKey) {
   $baseUrl = 'https://api.kpn-lora.com/thingpark/lrc/rest/downlink';
