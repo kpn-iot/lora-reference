@@ -112,14 +112,14 @@ class PayloadEncryption {
     $aHexString = Helper::byteArrayToHexString($a);
     
     // perform encryption/decryption
-    $data = pack("H*", $aHexString);
+    $data = hex2bin($aHexString);
     $method = "aes128";
-    $key = pack("H*", $this->_appSKey);
+    $key = hex2bin($this->_appSKey);
     $s = @openssl_encrypt($data, $method, $key, OPENSSL_RAW_DATA);
-    $sHexString = unpack("H*", $s);
-
+    $sHexString = bin2hex($s);
+    
     // perform bytewise XOR'ing 
-    $sByteArray = Helper::hexStringtoByteArray($sHexString[1]);
+    $sByteArray = Helper::hexStringtoByteArray($sHexString);
     $blockByteArray = Helper::hexStringtoByteArray($blockHexString);
     $encryptedBlockByteArray = [];
     for ($i = 0; $i < count($blockByteArray); $i++) {
