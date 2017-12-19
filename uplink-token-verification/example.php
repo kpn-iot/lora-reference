@@ -25,8 +25,8 @@ var_dump($tokenOk);
 /**
  * To verify the token that accompanies the DevEUI_Uplink
  * 
- * @param string $queryString - for instance: 
- * @param type $bodyObject - for instance for XML: 
+ * @param string $queryString
+ * @param type $bodyObject 
  * @param type $lrcAsKey - shared secret 128-bit key in HEX representation (32 characters) in lower case
  * @return bool Whether the token is correct
  */
