@@ -13,10 +13,10 @@
  * Example script for validating the token in the DevEUI_uplink API call
  */
 
-$queryString = urldecode($_SERVER['QUERY_STRING']);
-$bodyContent = file_get_contents("php://input");
-$bodyObject = simplexml_load_string($bodyContent);
-$lrcAsKey = "01234567890123456789012345678901";
+$queryString = urldecode($_SERVER['QUERY_STRING']); //fetch the query string from the request and decode the url encoding
+$bodyContent = file_get_contents("php://input"); //fetch the body from the request
+$bodyObject = simplexml_load_string($bodyContent); //interpret the XML content in the body
+$lrcAsKey = "01234567890123456789012345678901"; //define the LRC AS-Key. Is a shared secret between the Network Server and Application Server
 
 $tokenOk = checkToken($queryString, $bodyObject, $lrcAsKey);
 
