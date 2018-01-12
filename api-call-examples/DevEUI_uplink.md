@@ -7,7 +7,65 @@ POST
 ## Query Parameters
 `LrnDevEui=XXXXXXXXXXXXXXXX&LrnFPort=1&LrnInfos=TWA_100000000.000.AS-1-000000&AS_ID=100000000.000&Time=yyyy-mm-ddThh:mm:ss.sss7%2B01:00&Token=0123456789012345678901234567890123456789012345678901234567890123`
 
-## Body
+## JSON Body
+```js
+{
+  "DevEUI_uplink": {
+    "Time": "yyyy-mm-ddThh:mm:ss.sss+01:00",
+    "DevEUI": "XXXXXXXXXXXXXXXX",
+    "FPort": "1",
+    "FCntUp": "1",
+    "ADRbit": "1",
+    "MType": "2",
+    "FCntDn": "1",
+    "payload_hex": "00",
+    "mic_hex": "00000000",
+    "Lrcid": "0059AC01",
+    "LrrRSSI": "-100.000000",
+    "LrrSNR": "1.000000",
+    "SpFact": "12",
+    "SubBand": "G1",
+    "Channel": "LC1",
+    "DevLrrCnt": "1",
+    "Lrrid": "XXXXXXXX",
+    "Late": "0",
+    "LrrLAT": "51.907218",
+    "LrrLON": "4.489303",
+    "Lrrs": {
+      "Lrr": [
+        {
+          "Lrrid": "XXXXXXXX",
+          "Chain": "0",
+          "LrrRSSI": "-100.000000",
+          "LrrSNR": "1.000000",
+          "LrrESP": "-100.000000"
+        },
+        ...
+      ]
+    },
+    "DevLocTime": "yyyy-mm-ddThh:mm:ss.sss+01:00",
+    "DevLAT": "51.907218",
+    "DevLON": "4.489303",
+    "DevAlt": "0.000000",
+    "DevAcc": "0.000000",
+    "DevLocRadius": "0.000000",
+    "DevAltRadius": "0.000000",
+    "CustomerID": "100000000",
+    "CustomerData": {
+      "alr": {
+        "pro": "Static",
+        "ver": "1"
+      }
+    },
+    "ModelCfg": "0",
+    "InstantPER": "0.000000",
+    "MeanPER": "0.000000",
+    "DevAddr": "XXXXXXXX"
+  }
+}
+```
+
+## XML Body
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <DevEUI_uplink xmlns="http://uri.actility.com/lora">
