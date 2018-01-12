@@ -16,6 +16,7 @@ POST
     "FPort": "1",
     "FCntUp": "1",
     "ADRbit": "1",
+    "ACKbit": "1", /* Only present when ACK=1 in message */
     "MType": "2",
     "FCntDn": "1",
     "payload_hex": "00",
@@ -43,13 +44,13 @@ POST
         ...
       ]
     },
-    "DevLocTime": "yyyy-mm-ddThh:mm:ss.sss+01:00",
-    "DevLAT": "51.907218",
-    "DevLON": "4.489303",
-    "DevAlt": "0.000000",
-    "DevAcc": "0.000000",
-    "DevLocRadius": "0.000000",
-    "DevAltRadius": "0.000000",
+    "DevLocTime": "yyyy-mm-ddThh:mm:ss.sss+01:00", /* Only present when device has GEO connectivity plan */
+    "DevLAT": "51.907218", /* Only present when device has GEO connectivity plan */
+    "DevLON": "4.489303", /* Only present when device has GEO connectivity plan */
+    "DevAlt": "0.000000", /* Only present when device has GEO connectivity plan */
+    "DevAcc": "0.000000", /* Only present when device has GEO connectivity plan */
+    "DevLocRadius": "0.000000", /* Only present when device has GEO connectivity plan */
+    "DevAltRadius": "0.000000", /* Only present when device has GEO connectivity plan */
     "CustomerID": "100000000",
     "CustomerData": {
       "alr": {
@@ -74,6 +75,7 @@ POST
   <FPort>1</FPort>
   <FCntUp>1</FCntUp>
   <ADRbit>1</ADRbit>
+  <ACKbit>1</ACKbit> <!-- Only present when ACK=1 in message -->
   <MType>2</MType>
   <FCntDn>1</FCntDn>
   <payload_hex>00</payload_hex>
@@ -99,13 +101,13 @@ POST
     </Lrr>
     ...
   </Lrrs>
-  <DevLocTime>yyyy-mm-ddThh:mm:ss.sss+01:00</DevLocTime>
-  <DevLAT>51.907218</DevLAT>
-  <DevLON>4.489303</DevLON>
-  <DevAlt>0.000000</DevAlt>
-  <DevAcc>0.000000</DevAcc>
-  <DevLocRadius>0.000000</DevLocRadius>
-  <DevAltRadius>0.000000</DevAltRadius>
+  <DevLocTime>yyyy-mm-ddThh:mm:ss.sss+01:00</DevLocTime> <!-- Only present when device has GEO connectivity plan -->
+  <DevLAT>51.907218</DevLAT> <!-- Only present when device has GEO connectivity plan -->
+  <DevLON>4.489303</DevLON> <!-- Only present when device has GEO connectivity plan -->
+  <DevAlt>0.000000</DevAlt> <!-- Only present when device has GEO connectivity plan -->
+  <DevAcc>0.000000</DevAcc> <!-- Only present when device has GEO connectivity plan -->
+  <DevLocRadius>0.000000</DevLocRadius> <!-- Only present when device has GEO connectivity plan -->
+  <DevAltRadius>0.000000</DevAltRadius> <!-- Only present when device has GEO connectivity plan -->
   <CustomerID>100000000</CustomerID>
   <CustomerData>{"alr":{"pro":"Static","ver":"1"}}</CustomerData>
   <ModelCfg>0</ModelCfg>
