@@ -111,6 +111,7 @@ class TokenVerification {
         break;
       case static::TYPE_LOCATION:
         static::checkForPropertiesInBody(['CustomerID', 'DevEUI'], $bodyObject);
+        // The DevEUI value from the body should be transformed to lowercase to have a correct token calculation for DevEUI_location messages.
         $bodyElements = $bodyObject->CustomerID . strtolower($bodyObject->DevEUI);
         break;
       case static::TYPE_DOWNLINK_SENT:
