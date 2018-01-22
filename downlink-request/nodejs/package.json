@@ -1,0 +1,18 @@
+{
+  "name": "kpn-downlink-request-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "example.js",
+  "dependencies": {
+    "https": "^1.0.0",
+    "moment": "^2.20.1",
+    "sjcl": "^1.0.7",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Marcelis <paul.marcelis@kpn.com>",
+  "license": "MIT"
+}
