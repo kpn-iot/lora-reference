@@ -27,7 +27,7 @@ class TokenVerification {
    */
   public function __construct(string $lrcAsKey) {
     $lrcAsKeyLower = strtolower($lrcAsKey);
-    if (preg_match('/^[0-9a-f]{32}$/', $lrcAsKey) !== 1) {
+    if (preg_match('/^[0-9a-f]{32}$/', $lrcAsKeyLower) !== 1) {
       throw new Exception("LRC AS-Key not correct. Should be 16 bytes in HEX representation");
     }
     $this->_lrcAsKey = $lrcAsKeyLower;
