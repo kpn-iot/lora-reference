@@ -19,17 +19,35 @@ class TokenVerification {
   const TYPE_DOWNLINK_SENT = 2;
   const TYPE_LOCATION = 3;
 
-  protected $_lrcAsKey;
+  const SOURCE_THINGPARK = 4;
+  const SOURCE_DEVELOPER_PORTAL = 5;
+
+  protected $_lrcAsKey, $_source;
 
   /**
    * 
-   * @param string $lrcAsKey
+   * @param string $lrcAsKey - the shared secret key for token calculation
+   * @param $source - the source from which the message comes to be checked (thingpark or developer portal)
    */
-  public function __construct(string $lrcAsKey) {
+  public function __construct(string $lrcAsKey, $source = self::SOURCE_THINGPARK) {
     $lrcAsKeyLower = strtolower($lrcAsKey);
-    if (preg_match('/^[0-9a-f]{32}$/', $lrcAsKeyLower) !== 1) {
-      throw new Exception("LRC AS-Key not correct. Should be 16 bytes in HEX representation");
+    if (!in_array($source, [self::SOURCE_THINGPARK, self::SOURCE_DEVELOPER_PORTAL])) {
+      throw new Exception("Key type definition is not correct");
     }
+
+    switch ($source) {
+      case self::SOURCE_THINGPARK:
+      if (preg_match('/^[0-9a-f]{32}$/', $lrcAsKeyLower) !== 1) {
+        throw new Exception("LRC AS-Key not correct. Should be 16 bytes in HEX representation");
+      }
+      break;
+      case self::SOURCE_DEVELOPER_PORTAL:
+      if (preg_match('/^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12}$/', $lrcAsKeyLower) !== 1) {
+        throw new Exception("LRC AS-Key not correct. Should be in format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+      }
+      break;
+    }
+    $this->_source = $source;
     $this->_lrcAsKey = $lrcAsKeyLower;
   }
 
@@ -112,7 +130,8 @@ class TokenVerification {
       case static::TYPE_LOCATION:
         static::checkForPropertiesInBody(['CustomerID', 'DevEUI'], $bodyObject);
         // The DevEUI value from the body should be transformed to lowercase to have a correct token calculation for DevEUI_location messages.
-        $bodyElements = $bodyObject->CustomerID . strtolower($bodyObject->DevEUI);
+        $devEUIForToken = ($this->_source === static::SOURCE_THINGPARK) ? strtolower($bodyObject->DevEUI) : $bodyObject->DevEUI;
+        $bodyElements = $bodyObject->CustomerID . $devEUIForToken;
         break;
       case static::TYPE_DOWNLINK_SENT:
         static::checkForPropertiesInBody(['CustomerID', 'DevEUI', 'FPort', 'FCntDn'], $bodyObject);
