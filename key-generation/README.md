@@ -6,5 +6,5 @@ This folder contains examples for proper random key generation for various progr
 * Execute: `$ node example.js`
 
 ## Python
-* Prerequisites: Python
+* Prerequisites: Python 2 or 3
 * Execute: `$ python example.py` 
