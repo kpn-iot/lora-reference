@@ -51,6 +51,11 @@ POST
     "DevAcc": "0.000000", /* Only present when device has GEO connectivity plan */
     "DevLocRadius": "0.000000", /* Only present when device has GEO connectivity plan */
     "DevAltRadius": "0.000000", /* Only present when device has GEO connectivity plan */
+    "DevUlFCntUpUsed": "0", /* Only present when device has GEO connectivity plan */
+    "DevLocDilution": "0.000000", /* Only present when device has GEO connectivity plan */
+    "DevAltDilution": "0.000000", /* Only present when device has GEO connectivity plan */
+    "DevNorthVel": "0.000000", /* Only present when device has GEO connectivity plan */
+    "DevEastVel": "0.000000", /* Only present when device has GEO connectivity plan */
     "CustomerID": "100000000",
     "CustomerData": {
       "alr": {
@@ -108,6 +113,11 @@ POST
   <DevAcc>0.000000</DevAcc> <!-- Only present when device has GEO connectivity plan -->
   <DevLocRadius>0.000000</DevLocRadius> <!-- Only present when device has GEO connectivity plan -->
   <DevAltRadius>0.000000</DevAltRadius> <!-- Only present when device has GEO connectivity plan -->
+  <DevUlFCntUpUsed>0</DevUlFCntUpUsed> <!-- Only present when device has GEO connectivity plan -->
+  <DevLocDilution>0.000000</DevLocDilution> <!-- Only present when device has GEO connectivity plan -->
+  <DevAltDilution>0.000000</DevAltDilution> <!-- Only present when device has GEO connectivity plan -->
+  <DevNorthVel>0.000000</DevNorthVel> <!-- Only present when device has GEO connectivity plan -->
+  <DevEastVel>0.000000</DevEastVel> <!-- Only present when device has GEO connectivity plan -->
   <CustomerID>100000000</CustomerID>
   <CustomerData>{"alr":{"pro":"Static","ver":"1"}}</CustomerData>
   <ModelCfg>0</ModelCfg>
