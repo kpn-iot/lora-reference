@@ -24,6 +24,11 @@ POST
     "DevAcc": "0.000000",
     "DevLocRadius": "0.000000",
     "DevAltRadius": "0.000000",
+    "DevUlFCntUpUsed": "0",
+    "DevLocDilution": "0.000000",
+    "DevAltDilution": "0.000000",
+    "DevNorthVel": "0.000000",
+    "DevEastVel": "0.000000",
     "CustomerID": "100000000"
   }
 }
@@ -46,6 +51,11 @@ POST
   <DevAcc>0.000000</DevAcc>
   <DevLocRadius>0.000000</DevLocRadius>
   <DevAltRadius>0.000000</DevAltRadius>
+  <DevUlFCntUpUsed>0</DevUlFCntUpUsed>
+  <DevLocDilution>0.000000</DevLocDilution>
+  <DevAltDilution>0.000000</DevAltDilution>
+  <DevNorthVel>0.000000</DevNorthVel>
+  <DevEastVel>0.000000</DevEastVel>
   <CustomerID>100000000</CustomerID>
 </DevEUI_location>
 ```
