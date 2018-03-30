@@ -1,16 +1,17 @@
 <?php
 
-/*  _  __  ____    _   _ 
+/*  _  __  ____    _   _
  * | |/ / |  _ \  | \ | |
  * | ' /  | |_) | |  \| |
  * | . \  |  __/  | |\  |
  * |_|\_\ |_|     |_| \_|
- * 
+ *
  * (c) 2017 KPN
  * License: MIT License
  * Author: Paul Marcelis
- * 
+ *
  * Class to do perform token verification for the API calls to your Application Server.
+ * From KPN IoT LoRa Reference Code: https://github.com/kpn-iot/lora-reference
  */
 
 class TokenVerification {
@@ -25,34 +26,34 @@ class TokenVerification {
   protected $_lrcAsKey, $_source;
 
   /**
-   * 
+   *
    * @param string $lrcAsKey - the shared secret key for token calculation
    * @param $source - the source from which the message comes to be checked (thingpark or developer portal)
    */
   public function __construct(string $lrcAsKey, $source = self::SOURCE_THINGPARK) {
     $lrcAsKeyLower = strtolower($lrcAsKey);
     if (!in_array($source, [self::SOURCE_THINGPARK, self::SOURCE_DEVELOPER_PORTAL])) {
-      throw new Exception("Key type definition is not correct");
+      throw new \Exception("Key type definition is not correct");
     }
 
     switch ($source) {
       case self::SOURCE_THINGPARK:
-      if (preg_match('/^[0-9a-f]{32}$/', $lrcAsKeyLower) !== 1) {
-        throw new Exception("LRC AS-Key not correct. Should be 16 bytes in HEX representation");
-      }
-      break;
+        if (preg_match('/^[0-9a-f]{32}$/', $lrcAsKeyLower) !== 1) {
+          throw new \Exception("LRC AS-Key not correct. Should be 16 bytes in HEX representation");
+        }
+        break;
       case self::SOURCE_DEVELOPER_PORTAL:
-      if (preg_match('/^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12}$/', $lrcAsKeyLower) !== 1) {
-        throw new Exception("LRC AS-Key not correct. Should be in format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
-      }
-      break;
+        if (preg_match('/^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12}$/', $lrcAsKeyLower) !== 1) {
+          throw new \Exception("LRC AS-Key not correct. Should be in format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+        }
+        break;
     }
     $this->_source = $source;
     $this->_lrcAsKey = $lrcAsKeyLower;
   }
 
   /**
-   * 
+   *
    * @param type $queryString
    * @param type $bodyObject
    * @return bool
@@ -65,12 +66,12 @@ class TokenVerification {
     } elseif (property_exists($bodyObject, 'DevEUI_downlink_Sent')) {
       return $this->checkDownlinkSentToken($queryString, $bodyObject->DevEUI_downlink_Sent);
     } else {
-      throw new Exception("No valid body object");
+      throw new \Exception("No valid body object");
     }
   }
 
   /**
-   * 
+   *
    * @param type $queryString
    * @param type $bodyObject
    * @return bool
@@ -80,7 +81,7 @@ class TokenVerification {
   }
 
   /**
-   * 
+   *
    * @param type $queryString
    * @param type $bodyObject
    * @return bool
@@ -90,7 +91,7 @@ class TokenVerification {
   }
 
   /**
-   * 
+   *
    * @param type $queryString
    * @param type $bodyObject
    * @return bool
@@ -101,15 +102,15 @@ class TokenVerification {
 
   /**
    * To verify the token that accompanies the DevEUI_Uplink
-   * 
+   *
    * @param type $type
    * @param string $queryString
-   * @param object $bodyObject 
+   * @param object $bodyObject
    * @return bool Whether the token is correct
    */
   private function _innerCheckToken($type, $queryString, $bodyObject) {
     if (!in_array($type, [static::TYPE_UPLINK, static::TYPE_DOWNLINK_SENT, static::TYPE_LOCATION])) {
-      throw new Exception("Type incorrect");
+      throw new \Exception("Type incorrect");
     }
 
     // split query string into query parameters and request token
@@ -117,7 +118,7 @@ class TokenVerification {
     $queryStringPregMatches = [];
     preg_match($re, $queryString, $queryStringPregMatches);
     if (count($queryStringPregMatches) != 3) {
-      throw new Exception("The token could not be retrieved from the query string");
+      throw new \Exception("The token could not be retrieved from the query string");
     }
     $queryParameters = $queryStringPregMatches[1];
     $requestToken = $queryStringPregMatches[2];
@@ -148,15 +149,15 @@ class TokenVerification {
 
   /**
    * check whether the body has certain properties set
-   * 
+   *
    * @param type $checkProperties
    * @param type $bodyObject
-   * @throws Exception
+   * @throws \Exception
    */
   public static function checkForPropertiesInBody($checkProperties, $bodyObject) {
     foreach ($checkProperties as $property) {
       if (!property_exists($bodyObject, $property)) {
-        throw new Exception("Missing property " . $property . " in body");
+        throw new \Exception("Missing property " . $property . " in body");
       }
     }
   }
