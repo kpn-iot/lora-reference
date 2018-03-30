@@ -8,9 +8,10 @@
  * License: MIT License
  * Author: Paul Marcelis
  *
+ * Shannon entropy calculation based on https://gist.github.com/jabney/5018b4adc9b2bf488696
  */
-var crypto = require('crypto');
 
+var crypto = require('crypto');
 
 var keygen = {
   // get a key of (length) bytes in length in hexadecimal representation
