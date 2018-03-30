@@ -13,7 +13,7 @@
  * Example script for an Application Server ingestion point with token verification.
  */
 
-$queryString = $_SERVER['QUERY_STRING']; //fetch the query string from the request. Make sure the URL is url-decoded (So `%2B` => `+`)
+$queryString = urldecode($_SERVER['QUERY_STRING']); //fetch the query string from the request. Make sure the URL is url-decoded (So `%2B` => `+`)
 $bodyContent = file_get_contents("php://input"); //fetch the body from the request
 $lrcAsKey = "c6f5e3b263092120b8766b9aed9c41b4"; //define the LRC AS-Key. Is a shared secret between the Network Server and Application Server
 
