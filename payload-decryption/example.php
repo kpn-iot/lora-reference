@@ -28,6 +28,6 @@ $appSKey = "01234567890123456789012345678901"; //shared secret
 
 
 $crypt = new PayloadEncryption($appSKey);
-$decryptedPayload = $crypt->payload($payload, $crypt::DIR_UPLINK, $devAddr, $fCntUp);
+$decryptedPayload = $crypt->uplink($payload, $devAddr, $fCntUp);
 
 var_dump($decryptedPayload);
