@@ -1,0 +1,124 @@
+[
+    {
+        "id": "3a5eb863.7a659",
+        "type": "function",
+        "z": "1012c9b6.638dfe",
+        "name": "Prep",
+        "func": "/*  _  __  ____    _   _ \n * | |/ / |  _ \\  | \\ | |\n * | ' /  | |_) | |  \\| |\n * | . \\  |  __/  | |\\  |\n * |_|\\_\\ |_|     |_| \\_|\n * \n * (c) 2018 KPN\n * License: MIT License\n * Author: Michiel Jol, Paul Marcelis\n * \n */\n\n\n/**\n *  Secure Hash Algorithm (SHA256)\n *  Original code by Angel Marin, Paul Johnston (http://www.webtoolkit.info/)\n **/\n\nfunction SHA256(s) {\n    var chrsz = 8;\n    var hexcase = 0;\n\n    function safe_add(x, y) {\n        var lsw = (x & 0xFFFF) + (y & 0xFFFF);\n        var msw = (x >> 16) + (y >> 16) + (lsw >> 16);\n        return (msw << 16) | (lsw & 0xFFFF);\n    }\n\n    function S(X, n) { return (X >>> n) | (X << (32 - n)); }\n    function R(X, n) { return (X >>> n); }\n    function Ch(x, y, z) { return ((x & y) ^ ((~x) & z)); }\n    function Maj(x, y, z) { return ((x & y) ^ (x & z) ^ (y & z)); }\n    function Sigma0256(x) { return (S(x, 2) ^ S(x, 13) ^ S(x, 22)); }\n    function Sigma1256(x) { return (S(x, 6) ^ S(x, 11) ^ S(x, 25)); }\n    function Gamma0256(x) { return (S(x, 7) ^ S(x, 18) ^ R(x, 3)); }\n    function Gamma1256(x) { return (S(x, 17) ^ S(x, 19) ^ R(x, 10)); }\n\n    function core_sha256(m, l) {\n        var K = new Array(0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5, 0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174, 0xE49B69C1, 0xEFBE4786, 0xFC19DC6, 0x240CA1CC, 0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA, 0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7, 0xC6E00BF3, 0xD5A79147, 0x6CA6351, 0x14292967, 0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13, 0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85, 0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3, 0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070, 0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5, 0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3, 0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208, 0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2);\n        var HASH = new Array(0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19);\n        var W = new Array(64);\n        var a, b, c, d, e, f, g, h, i, j;\n        var T1, T2;\n\n        m[l >> 5] |= 0x80 << (24 - l % 32);\n        m[((l + 64 >> 9) << 4) + 15] = l;\n\n        for (var i = 0; i < m.length; i += 16) {\n            a = HASH[0];\n            b = HASH[1];\n            c = HASH[2];\n            d = HASH[3];\n            e = HASH[4];\n            f = HASH[5];\n            g = HASH[6];\n            h = HASH[7];\n\n            for (var j = 0; j < 64; j++) {\n                if (j < 16) W[j] = m[j + i];\n                else W[j] = safe_add(safe_add(safe_add(Gamma1256(W[j - 2]), W[j - 7]), Gamma0256(W[j - 15])), W[j - 16]);\n\n                T1 = safe_add(safe_add(safe_add(safe_add(h, Sigma1256(e)), Ch(e, f, g)), K[j]), W[j]);\n                T2 = safe_add(Sigma0256(a), Maj(a, b, c));\n\n                h = g;\n                g = f;\n                f = e;\n                e = safe_add(d, T1);\n                d = c;\n                c = b;\n                b = a;\n                a = safe_add(T1, T2);\n            }\n\n            HASH[0] = safe_add(a, HASH[0]);\n            HASH[1] = safe_add(b, HASH[1]);\n            HASH[2] = safe_add(c, HASH[2]);\n            HASH[3] = safe_add(d, HASH[3]);\n            HASH[4] = safe_add(e, HASH[4]);\n            HASH[5] = safe_add(f, HASH[5]);\n            HASH[6] = safe_add(g, HASH[6]);\n            HASH[7] = safe_add(h, HASH[7]);\n        }\n        return HASH;\n    }\n\n    function str2binb(str) {\n        var bin = Array();\n        var mask = (1 << chrsz) - 1;\n        for (var i = 0; i < str.length * chrsz; i += chrsz) {\n            bin[i >> 5] |= (str.charCodeAt(i / chrsz) & mask) << (24 - i % 32);\n        }\n        return bin;\n    }\n\n    function Utf8Encode(string) {\n        string = string.replace(/\\r\\n/g, \"\\n\");\n        var utftext = \"\";\n\n        for (var n = 0; n < string.length; n++) {\n\n            var c = string.charCodeAt(n);\n\n            if (c < 128) {\n                utftext += String.fromCharCode(c);\n            }\n            else if ((c > 127) && (c < 2048)) {\n                utftext += String.fromCharCode((c >> 6) | 192);\n                utftext += String.fromCharCode((c & 63) | 128);\n            }\n            else {\n                utftext += String.fromCharCode((c >> 12) | 224);\n                utftext += String.fromCharCode(((c >> 6) & 63) | 128);\n                utftext += String.fromCharCode((c & 63) | 128);\n            }\n\n        }\n\n        return utftext;\n    }\n\n    function binb2hex(binarray) {\n        var hex_tab = hexcase ? \"0123456789ABCDEF\" : \"0123456789abcdef\";\n        var str = \"\";\n        for (var i = 0; i < binarray.length * 4; i++) {\n            str += hex_tab.charAt((binarray[i >> 2] >> ((3 - i % 4) * 8 + 4)) & 0xF) +\n                hex_tab.charAt((binarray[i >> 2] >> ((3 - i % 4) * 8)) & 0xF);\n        }\n        return str;\n    }\n\n    s = Utf8Encode(s);\n    return binb2hex(core_sha256(str2binb(s), s.length * chrsz));\n}\n\n//Time\nvar date = new Date();\nvar day = date.getDate();\nvar month = date.getMonth() + 1;\nvar year = date.getUTCFullYear();\nvar hour = date.getUTCHours();\nvar minute = date.getUTCMinutes();\nvar second = date.getUTCSeconds();\nvar timestr = year + \"-\" + (\"0\" + month.toString()).slice(-2) + \"-\" + (\"0\" + day.toString()).slice(-2) + \"T\" + (\"0\" + hour.toString()).slice(-2) + \":\" + (\"0\" + minute.toString()).slice(-2) + \":\" + (\"0\" + second.toString()).slice(-2);\n\n//Query\nvar devEUI = msg.payload.devEUI;\nvar fPort = msg.payload.fPort;\nvar payload = msg.payload.payload;\nvar asId = msg.payload.asId;\nvar lrcAsKey = msg.payload.lrcAsKey;\n\nvar querystr = \"DevEUI=\" + devEUI + \"&FPort=\" + fPort + \"&Payload=\" + payload + \"&AS_ID=\" + asId;\nif (msg.payload.confirmed !== undefined) {\n    querystr += \"&Confirmed=\" + ((msg.payload.confirmed) ? 1 : 0);\n}\nif (msg.payload.flushDownlinkQueue !== undefined) {\n    querystr += \"&FlushDownlinkQueue=\" + ((msg.payload.flushDownlinkQueue) ? 1 : 0);\n}\nif (msg.payload.validityTime !== undefined) {\n    querystr += \"&ValidityTime=\" + msg.payload.validityTime;\n}\nquerystr += \"&Time=\" + timestr;\n\nvar hash256 = SHA256(querystr + lrcAsKey.toLowerCase());\nmsg.payload = \"https://api.kpn-lora.com/thingpark/lrc/rest/downlink?\" + querystr + \"&\" + \"Token=\" + hash256;\nmsg.url = msg.payload;\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 570,
+        "y": 220,
+        "wires": [
+            [
+                "8a3b7174.71ecc8",
+                "955c9068.3ebb8"
+            ]
+        ]
+    },
+    {
+        "id": "8a3b7174.71ecc8",
+        "type": "http request",
+        "z": "1012c9b6.638dfe",
+        "name": "Downlink request",
+        "method": "POST",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 750,
+        "y": 220,
+        "wires": [
+            [
+                "66a43089.6dea1"
+            ]
+        ]
+    },
+    {
+        "id": "d5f810b8.441ed8",
+        "type": "debug",
+        "z": "1012c9b6.638dfe",
+        "name": "Success",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1080,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "53dde991.93244",
+        "type": "inject",
+        "z": "1012c9b6.638dfe",
+        "name": "Shoot",
+        "topic": "",
+        "payload": "{\"devEUI\":\"\",\"fPort\":1,\"payload\":\"\",\"asId\":\"\",\"lrcAsKey\":\"\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 330,
+        "y": 220,
+        "wires": [
+            [
+                "3a5eb863.7a659"
+            ]
+        ]
+    },
+    {
+        "id": "d3aab41.a038048",
+        "type": "comment",
+        "z": "1012c9b6.638dfe",
+        "name": "Example code for KPN LoRa downlink request",
+        "info": "The Prep function expects the following values \nin `msg.payload`:\n\n* `devEUI` (hex) required\n* `fPort` (int) required\n* `payload` (hex) required\n* `asId` (string) required\n* `lrcAsKey` (string) required\n* `confirmed` (boolean) optional\n* `flushDownlinkQueue` (boolean) optional\n* `validityTime` (nr seconds or timestamp) optional",
+        "x": 450,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "66a43089.6dea1",
+        "type": "function",
+        "z": "1012c9b6.638dfe",
+        "name": "Process",
+        "func": "/*  _  __  ____    _   _ \n * | |/ / |  _ \\  | \\ | |\n * | ' /  | |_) | |  \\| |\n * | . \\  |  __/  | |\\  |\n * |_|\\_\\ |_|     |_| \\_|\n * \n * (c) 2018 KPN\n * License: MIT License\n * Author: Michiel Jol, Paul Marcelis\n * \n */\n\nmsg.payload = msg.payload.replace(\"<html><body>\",\"\").replace(\"</body></html>\",\"\");\nif (msg.payload !== \"Request queued by LRC\") {\n    return [null, msg];\n}\nreturn [msg, null];\n",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 920,
+        "y": 220,
+        "wires": [
+            [
+                "d5f810b8.441ed8"
+            ],
+            [
+                "88bd0bb3.736648"
+            ]
+        ],
+        "outputLabels": [
+            "Success",
+            "Error"
+        ]
+    },
+    {
+        "id": "955c9068.3ebb8",
+        "type": "debug",
+        "z": "1012c9b6.638dfe",
+        "name": "URL",
+        "active": true,
+        "console": "false",
+        "complete": "url",
+        "x": 730,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "88bd0bb3.736648",
+        "type": "debug",
+        "z": "1012c9b6.638dfe",
+        "name": "Error",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1070,
+        "y": 240,
+        "wires": []
+    }
+]
