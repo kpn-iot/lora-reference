@@ -29,8 +29,10 @@ class TokenVerification {
    *
    * @param string $lrcAsKey - the shared secret key for token calculation
    * @param $source - the source from which the message comes to be checked (thingpark or developer portal)
+   *
+   * @throws \Exception
    */
-  public function __construct(string $lrcAsKey, $source = self::SOURCE_THINGPARK) {
+  public function __construct($lrcAsKey, $source = self::SOURCE_THINGPARK) {
     $lrcAsKeyLower = strtolower($lrcAsKey);
     if (!in_array($source, [self::SOURCE_THINGPARK, self::SOURCE_DEVELOPER_PORTAL])) {
       throw new \Exception("Key type definition is not correct");
@@ -54,9 +56,10 @@ class TokenVerification {
 
   /**
    *
-   * @param type $queryString
-   * @param type $bodyObject
+   * @param string $queryString
+   * @param object $bodyObject
    * @return bool
+   * @throws \Exception
    */
   public function checkToken($queryString, $bodyObject) {
     if (property_exists($bodyObject, 'DevEUI_uplink')) {
@@ -72,29 +75,30 @@ class TokenVerification {
 
   /**
    *
-   * @param type $queryString
-   * @param type $bodyObject
+   * @param string $queryString
+   * @param object $bodyObject
    * @return bool
+   * @throws \Exception
    */
   public function checkUplinkToken($queryString, $bodyObject) {
     return $this->_innerCheckToken(static::TYPE_UPLINK, $queryString, $bodyObject);
   }
 
   /**
-   *
-   * @param type $queryString
-   * @param type $bodyObject
+   * @param string $queryString
+   * @param object $bodyObject
    * @return bool
+   * @throws \Exception
    */
   public function checkLocationToken($queryString, $bodyObject) {
     return $this->_innerCheckToken(static::TYPE_LOCATION, $queryString, $bodyObject);
   }
 
   /**
-   *
-   * @param type $queryString
-   * @param type $bodyObject
+   * @param string $queryString
+   * @param object $bodyObject
    * @return bool
+   * @throws \Exception
    */
   public function checkDownlinkSentToken($queryString, $bodyObject) {
     return $this->_innerCheckToken(static::TYPE_DOWNLINK_SENT, $queryString, $bodyObject);
@@ -103,10 +107,11 @@ class TokenVerification {
   /**
    * To verify the token that accompanies the DevEUI_Uplink
    *
-   * @param type $type
+   * @param integer $type
    * @param string $queryString
    * @param object $bodyObject
    * @return bool Whether the token is correct
+   * @throws \Exception
    */
   private function _innerCheckToken($type, $queryString, $bodyObject) {
     if (!in_array($type, [static::TYPE_UPLINK, static::TYPE_DOWNLINK_SENT, static::TYPE_LOCATION])) {
@@ -150,8 +155,8 @@ class TokenVerification {
   /**
    * check whether the body has certain properties set
    *
-   * @param type $checkProperties
-   * @param type $bodyObject
+   * @param array $checkProperties
+   * @param object $bodyObject
    * @throws \Exception
    */
   public static function checkForPropertiesInBody($checkProperties, $bodyObject) {
