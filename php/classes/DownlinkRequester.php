@@ -12,7 +12,50 @@
  * 
  */
 
-class DownlinkRequest {
+class DownlinkRequester {
+
+  private $_asId, $_lrcAsKey;
+
+  public function __construct($asId = null, $lrcAsKey = null) {
+    if ($asId !== null && $lrcAsKey === null) {
+      throw new \Exception('AS_ID and LRC AS-Key should be given both');
+    }
+    $this->_asId = $asId;
+    $this->_lrcAsKey = $lrcAsKey;
+  }
+
+  public function getRequestUrl($devEUI, $portId, $payload) {
+    $baseUrl = 'https://api.kpn-lora.com/thingpark/lrc/rest/downlink';
+
+    $queryParameters = [
+      'DevEUI' => $devEUI,
+      'FPort' => $portId,
+      'Payload' => $payload,
+      'Time' => gmdate('Y-m-d\TH:i:s') //UTC time works best
+    ];
+
+    if ($this->_asId !== null) {
+      $queryParameters['AS_ID'] = $this->_asId;
+    }
+
+    // prepare query string
+    $queryString = '';
+    foreach ($queryParameters as $key => $value) {
+      $queryString .= $key . '=' . $value . '&';
+    }
+    $queryString = rtrim($queryString, '&');
+
+    $url = $baseUrl . '?' . $queryString;
+
+    if ($this->_asId !== null) {
+      // calculate token
+      $hashIn = $queryString . strtolower($this->_lrcAsKey);
+      $token = hash('sha256', $hashIn);
+      $url .= '&Token=' . $token;
+    }
+
+    return $url;
+  }
     
   /**
    * Calculate token and queue a downlink message
@@ -24,29 +67,8 @@ class DownlinkRequest {
    * @param string $lrcAsKey
    * @return boolean|string - true if success, else the error message
    */
-  static function queue($devEUI, $portId, $payload, $asId, $lrcAsKey) {
-    $baseUrl = 'https://api.kpn-lora.com/thingpark/lrc/rest/downlink';
-
-    $queryParameters = [
-      'DevEUI' => $devEUI,
-      'FPort' => $portId,
-      'Payload' => $payload,
-      'AS_ID' => $asId,
-      'Time' => gmdate('Y-m-d\TH:i:s') //UTC time works best
-    ];
-
-    // prepare query string
-    $queryString = '';
-    foreach ($queryParameters as $key => $value) {
-      $queryString .= $key . '=' . $value . '&';
-    }
-    $queryString = rtrim($queryString, '&');
-
-    // calculate token
-    $hashIn = $queryString . $lrcAsKey;
-    $token = hash('sha256', $hashIn);
-
-    $url = $baseUrl . '?' . $queryString . '&Token=' . $token;
+  public function request($devEUI, $portId, $payload) {
+    $url = $this->getRequestUrl($devEUI, $portId, $payload);
 
     // use CURL to execute the API call
     $ch = curl_init();
@@ -62,11 +84,11 @@ class DownlinkRequest {
     $success = (strpos($response, "Request queued by LRC") !== false);
     $result = str_replace(['<html><body>', '</body></html>'], ['', ''], $response);
 
-    if ($success === true) {
-      return true;
-    } else {
-      return $result;
+    if ($success !== true) {
+      throw new \Exception($result);
     }
+    
+    return true;
   }
 
 }

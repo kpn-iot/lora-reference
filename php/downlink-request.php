@@ -13,15 +13,16 @@
  * Example script for queuing a downlink message
  */
 
-require(__DIR__ . '/DownlinkRequest.php');
+require_once(__DIR__ . "/classes/ApplicationServerContext.php");
+
+// context parameters
+$asId = "100000000.000";
 
 // parameters required for downlink request
 $devEUI = "0123456789012345";
 $portId = 1;
 $payload = "00";
-$asId = "100000000.000";
-$lrcAsKey = "01234567890123456789012345678901";
 
-$result = DownlinkRequest::queue($devEUI, $portId, $payload, $asId, $lrcAsKey);
-
+$context = new ApplicationServerContext($asId);
+$result = $context->getDownlinkRequester()->request($devEUI, $portId, $payload);
 var_dump($result);

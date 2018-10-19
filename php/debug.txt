@@ -1,0 +1,1 @@
+https://api.kpn-lora.com/thingpark/lrc/rest/downlink?DevEUI=0059AC000017338B&FPort=2&Payload=84EE4EE217&Time=2018-10-19T14:54:33&AS_ID=hsmtest&Token=92bb2c029a6249e286926f74cf1c2a434cbd0df86cbd4b60985174cd599aa9c5

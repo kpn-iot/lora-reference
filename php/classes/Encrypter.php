@@ -15,7 +15,7 @@
 
  require_once(__DIR__ . "/Helper.php");
 
-class PayloadEncryption {
+class Encrypter {
 
   const DIR_UPLINK = 0;
   const DIR_DOWNLINK = 1;
@@ -39,8 +39,12 @@ class PayloadEncryption {
     return $this->payload($payloadHexString, static::DIR_UPLINK, $devAddr, $fCntUp);
   }
   
-  public function downlink($payloadHexString, $devAddr, $fCntDown) {
-    return $this->payload($payloadHexString, static::DIR_DOWNLINK, $devAddr, $fCntDown);
+  public function downlink($payloadHexString, $devAddr, $fCntDn) {
+    return $this->payload($payloadHexString, static::DIR_DOWNLINK, $devAddr, $fCntDn);
+  }
+
+  public function joinAccept($payloadHexString) {
+    return $this->_aes($payloadHexString, $this->_appSKey);
   }
 
   /**
@@ -112,12 +116,8 @@ class PayloadEncryption {
     ];
     $aHexString = Helper::byteArrayToHexString($a);
 
-    // perform encryption/decryption
-    $data = hex2bin($aHexString);
-    $method = "aes128";
-    $key = hex2bin($this->_appSKey);
-    $s = @openssl_encrypt($data, $method, $key, OPENSSL_RAW_DATA);
-    $sHexString = bin2hex($s);
+
+    $sHexString = $this->_aes($aHexString, $this->_appSKey);
 
     // perform bytewise XOR'ing 
     $sByteArray = Helper::hexStringtoByteArray($sHexString);
@@ -128,6 +128,15 @@ class PayloadEncryption {
     }
 
     return Helper::byteArrayToHexString($encryptedBlockByteArray);
+  }
+
+  private function _aes($dataHexString, $keyHexString) {
+    $dataHexStringLength = strlen($dataHexString);
+    $data = hex2bin($dataHexString);
+    $method = "aes128";
+    $key = hex2bin($keyHexString);
+    $s = @openssl_encrypt($data, $method, $key, OPENSSL_RAW_DATA);
+    return substr(bin2hex($s), 0, $dataHexStringLength);
   }
 
 }
