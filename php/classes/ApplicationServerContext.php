@@ -7,7 +7,8 @@ class ApplicationServerContext {
   const LRC_AS_KEYS = [
     'hsmtest' => '17D107FD47387B714D9E5AACCE614233',
     'TWA_100000001.999' => 'c6f5e3b263092120b8766b9aed9c41b4',
-    '100000000.000' => '01234567890123456789012345678901'
+    '100000000.000' => '01234567890123456789012345678901',
+    '100006475.1233' => '5848b7055deb146b6214a19dfc364cf3'
   ];
 
   private $_asId, $_lrcAsKey, $_tokenVerifier = null, $_downlinkRequester = null;
