@@ -22,6 +22,17 @@ $payload = "00";
 $asId = "100000000.000";
 $lrcAsKey = "01234567890123456789012345678901";
 
-$result = DownlinkRequest::queue($devEUI, $portId, $payload, $asId, $lrcAsKey);
+require_once(__DIR__ . "/../../payload-decryption/PayloadEncryption.php");
+
+// parameters needed for payload encryption
+$appSKey = "01234567890123456789012345678901";
+$devAddr = "01234567";
+$fCntDn = 1;
+
+$crypt = new PayloadEncryption($appSKey);
+$payloadEncrypted = $crypt->downlink($payload, $devAddr, $fCntDn);
+
+
+$result = DownlinkRequest::queue($devEUI, $portId, $payloadEncrypted, $asId, $lrcAsKey);
 
 var_dump($result);
