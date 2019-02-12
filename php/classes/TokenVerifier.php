@@ -129,6 +129,7 @@ class TokenVerifier {
         if (!property_exists($bodyObject, 'FPort')) {
           $bodyObject->FPort = 0;
         }
+        
         static::checkForPropertiesInObject(['CustomerID', 'DevEUI', 'FPort', 'FCntUp', 'payload_hex'], $bodyObject);
         $bodyElements = $bodyObject->CustomerID . $bodyObject->DevEUI . $bodyObject->FPort . $bodyObject->FCntUp . $bodyObject->payload_hex;
         break;
