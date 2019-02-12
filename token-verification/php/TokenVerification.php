@@ -130,6 +130,9 @@ class TokenVerification {
 
     switch ($type) {
       case static::TYPE_UPLINK:
+        if (!property_exists($bodyObject, 'FPort')) {
+          $bodyObject->FPort = 0;
+        }
         static::checkForPropertiesInBody(['CustomerID', 'DevEUI', 'FPort', 'FCntUp', 'payload_hex'], $bodyObject);
         $bodyElements = $bodyObject->CustomerID . $bodyObject->DevEUI . $bodyObject->FPort . $bodyObject->FCntUp . $bodyObject->payload_hex;
         break;
