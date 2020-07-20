@@ -43,7 +43,7 @@ class DownlinkRequest {
     $queryString = rtrim($queryString, '&');
 
     // calculate token
-    $hashIn = $queryString . $lrcAsKey;
+    $hashIn = $queryString . strtolower($lrcAsKey);
     $token = hash('sha256', $hashIn);
 
     $url = $baseUrl . '?' . $queryString . '&Token=' . $token;
