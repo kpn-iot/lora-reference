@@ -76,7 +76,7 @@ function getDownlinkUrl(devEUI, fPort, payload, asId, lrcAsKey, confirmed = fals
   };
   queryString = queryString.slice(0, -1);
 
-  var hashIn = queryString + lrcAsKey;
+  var hashIn = queryString + lrcAsKey.toLowerCase();
   var tokenInt = sjcl.hash.sha256.hash(hashIn);
   var token = sjcl.codec.hex.fromBits(tokenInt);
   var postUrl = url.parse(baseUrl + "?" + queryString + "&Token=" + token);
